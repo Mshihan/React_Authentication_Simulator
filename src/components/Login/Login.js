@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
@@ -44,17 +44,20 @@ const Login = (props) => {
     { value: '', isValid: null }
   )
 
-  // useEffect(() => {
-  //   const identifier = setTimeout(() => {
-  //     setFormIsValid(
-  //       enteredEmail.includes('@') && enteredPassword.trim().length > 6
-  //     );
-  //   }, 500);
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
 
-  //   return () => {
-  //     clearTimeout(identifier);
-  //   };
-  // }, [enteredEmail, enteredPassword])
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      setFormIsValid(
+        emailIsValid && passwordIsValid
+      );
+    }, 500);
+
+    return () => {
+      clearTimeout(identifier);
+    };
+  }, [emailIsValid, passwordIsValid])
 
   const emailChangeHandler = (event) => {
     dispatchEmail({
@@ -63,9 +66,9 @@ const Login = (props) => {
     })
     // setEnteredEmail(event.target.value);
 
-    setFormIsValid(
-      emailState.value.includes('@') && passwordState.isValid
-    );
+    // setFormIsValid(
+    //   emailState.isValid && passwordState.isValid
+    // );
   };
 
   const passwordChangeHandler = (event) => {
@@ -76,9 +79,9 @@ const Login = (props) => {
     });
 
 
-    setFormIsValid(
-      emailState.value.includes('@') && passwordState.isValid
-    );
+    // setFormIsValid(
+    //   emailState.isValid && passwordState.isValid
+    // );
 
   };
 
@@ -94,6 +97,10 @@ const Login = (props) => {
     dispatchPassword({
       type: "VALIDATE_PASSWORD",
     });
+
+    // setFormIsValid(
+    //   emailState.isValid && passwordState.isValid
+    // );
 
     // setPasswordIsValid(enteredPassword.trim().length > 6);
   };
@@ -120,7 +127,7 @@ const Login = (props) => {
           />
         </div>
         <div
-          className={`${classes.control} ${passwordState.value === false ? classes.invalid : ''
+          className={`${classes.control} ${passwordState.isValid === false ? classes.invalid : ''
             }`}
         >
           <label htmlFor="password">Password</label>
