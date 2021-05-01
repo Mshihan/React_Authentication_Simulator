@@ -7,10 +7,6 @@ import AuthContext from './store/auth-context';
 
 function App() {
   const context = useContext(AuthContext);
-
-
-
-
   return (
     <React.Fragment>
       <MainHeader onLogout={context.onLogIn} />
