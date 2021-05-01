@@ -20,9 +20,10 @@ const passwordReducer = (state, action) => {
   }
 
   if (action.type === "VALIDATE_PASSWORD") {
+    console.log(state.value.trim().length > 6);
     return { value: state.value, isValid: state.value.trim().length > 6 }
   }
-  return { value: '', isValid: false }
+  // return { value: '', isValid: false }
 };
 
 const Login = (props) => {
@@ -63,7 +64,7 @@ const Login = (props) => {
     // setEnteredEmail(event.target.value);
 
     setFormIsValid(
-      emailState.value.includes('@') && passwordState.value.trim().length > 6
+      emailState.value.includes('@') && passwordState.isValid
     );
   };
 
@@ -72,27 +73,28 @@ const Login = (props) => {
     dispatchPassword({
       type: "USER_INPUT_PASSWORD",
       val: event.target.value,
-    })
-
-
+    });
 
 
     setFormIsValid(
-      emailState.value.includes('@') && passwordState.value.trim().length > 6
+      emailState.value.includes('@') && passwordState.isValid
     );
+
   };
 
   const validateEmailHandler = () => {
     dispatchEmail({
       type: "VALIDATE_EMAIL",
-    })
+    });
     // setEmailIsValid(emailState.isValid);
+
   };
 
   const validatePasswordHandler = () => {
     dispatchPassword({
       type: "VALIDATE_PASSWORD",
-    })
+    });
+
     // setPasswordIsValid(enteredPassword.trim().length > 6);
   };
 
