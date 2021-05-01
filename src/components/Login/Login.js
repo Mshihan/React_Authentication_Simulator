@@ -1,28 +1,28 @@
-import React, { useState, useEffect, useReducer, useContext } from 'react';
+import React, { useState, useEffect, useReducer, useContext } from "react";
 
-import Card from '../UI/Card/Card';
-import classes from './Login.module.css';
-import Button from '../UI/Button/Button';
-import AuthContext from '../../store/auth-context';
+import Card from "../UI/Card/Card";
+import classes from "./Login.module.css";
+import Button from "../UI/Button/Button";
+import AuthContext from "../../store/auth-context";
 
 const emailReducer = (state, action) => {
-  if (action.type === 'USER_INPUT_EMAIL') {
-    return { value: action.val, isValid: action.val.includes('@') }
+  if (action.type === "USER_INPUT_EMAIL") {
+    return { value: action.val, isValid: action.val.includes("@") };
   }
   if (action.type === "VALIDATE_EMAIL") {
-    return { value: state.value, isValid: state.value.includes('@') }
+    return { value: state.value, isValid: state.value.includes("@") };
   }
-  return { value: '', isValid: false };
+  return { value: "", isValid: false };
 };
 
 const passwordReducer = (state, action) => {
   if (action.type === "USER_INPUT_PASSWORD") {
-    return { value: action.val, isValid: action.val.trim().length > 6 }
+    return { value: action.val, isValid: action.val.trim().length > 6 };
   }
 
   if (action.type === "VALIDATE_PASSWORD") {
     console.log(state.value.trim().length > 6);
-    return { value: state.value, isValid: state.value.trim().length > 6 }
+    return { value: state.value, isValid: state.value.trim().length > 6 };
   }
   // return { value: '', isValid: false }
 };
@@ -34,16 +34,15 @@ const Login = (props) => {
   // const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
+  const [emailState, dispatchEmail] = useReducer(emailReducer, {
+    value: "",
+    isValid: null,
+  });
 
-  const [emailState, dispatchEmail] = useReducer(
-    emailReducer,
-    { value: '', isValid: null }
-  );
-
-  const [passwordState, dispatchPassword] = useReducer(
-    passwordReducer,
-    { value: '', isValid: null }
-  );
+  const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
+    value: "",
+    isValid: null,
+  });
 
   const authContext = useContext(AuthContext);
 
@@ -52,21 +51,19 @@ const Login = (props) => {
 
   useEffect(() => {
     const identifier = setTimeout(() => {
-      setFormIsValid(
-        emailIsValid && passwordIsValid
-      );
+      setFormIsValid(emailIsValid && passwordIsValid);
     }, 500);
 
     return () => {
       clearTimeout(identifier);
     };
-  }, [emailIsValid, passwordIsValid])
+  }, [emailIsValid, passwordIsValid]);
 
   const emailChangeHandler = (event) => {
     dispatchEmail({
       type: "USER_INPUT_EMAIL",
       val: event.target.value,
-    })
+    });
     // setEnteredEmail(event.target.value);
 
     // setFormIsValid(
@@ -81,11 +78,9 @@ const Login = (props) => {
       val: event.target.value,
     });
 
-
     // setFormIsValid(
     //   emailState.isValid && passwordState.isValid
     // );
-
   };
 
   const validateEmailHandler = () => {
@@ -93,7 +88,6 @@ const Login = (props) => {
       type: "VALIDATE_EMAIL",
     });
     // setEmailIsValid(emailState.isValid);
-
   };
 
   const validatePasswordHandler = () => {
@@ -117,8 +111,9 @@ const Login = (props) => {
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
         <div
-          className={`${classes.control} ${emailState.isValid === false ? classes.invalid : ''
-            }`}
+          className={`${classes.control} ${
+            emailState.isValid === false ? classes.invalid : ""
+          }`}
         >
           <label htmlFor="email">E-Mail</label>
           <input
@@ -130,8 +125,9 @@ const Login = (props) => {
           />
         </div>
         <div
-          className={`${classes.control} ${passwordState.isValid === false ? classes.invalid : ''
-            }`}
+          className={`${classes.control} ${
+            passwordState.isValid === false ? classes.invalid : ""
+          }`}
         >
           <label htmlFor="password">Password</label>
           <input
